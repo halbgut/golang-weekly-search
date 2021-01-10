@@ -18,25 +18,28 @@ var (
 )
 
 func main() {
-	err := run()
+	usage, err := run()
 	if err != nil {
 		fmt.Println(err)
+		if usage {
+			flag.Usage()
+		}
 		os.Exit(1)
 	}
 }
 
-func run() error {
+func run() (bool, error) {
 	flag.Parse()
 	base := "https://golangweekly.com/issues/"
 	if len(*query) == 0 {
-		return fmt.Errorf("Missing -search flag")
+		return true, fmt.Errorf("Missing -search flag")
 	}
 	for i := 344; i >= 0; i-- {
 		url := fmt.Sprintf("%v%v", base, i)
 		start := time.Now()
 		ma, err := process(url, *query, *ignorecase)
 		if err != nil {
-			return fmt.Errorf("Failed to fetch issue: %w", err)
+			return false, fmt.Errorf("Failed to fetch issue: %w", err)
 		}
 		if *single && ma {
 			break
@@ -45,7 +48,7 @@ func run() error {
 			fmt.Println("Took this long:", time.Now().Sub(start))
 		}
 	}
-	return nil
+	return false, nil
 }
 
 func scheduler() {
