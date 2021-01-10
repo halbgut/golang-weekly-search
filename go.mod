@@ -1,4 +1,4 @@
-module glang-weekly
+module github.com/halbgut/golang-weekly-search
 
 go 1.15
 
