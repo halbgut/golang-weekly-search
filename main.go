@@ -14,7 +14,7 @@ var (
 	query      = flag.String("search", "", "The string to look for")
 	ignorecase = flag.Bool("ignorecase", false, "Do a case insensitive search")
 	verbose    = flag.Bool("verbose", false, "Verbose output")
-	single     = flag.Bool("single", false, "Stop after one match has been found")
+	all        = flag.Bool("all", false, "Do not stop after one match has been found")
 )
 
 func main() {
@@ -41,7 +41,7 @@ func run() (bool, error) {
 		if err != nil {
 			return false, fmt.Errorf("Failed to fetch issue: %w", err)
 		}
-		if *single && ma {
+		if !*all && ma {
 			break
 		}
 		if *verbose {
